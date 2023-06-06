@@ -3,6 +3,7 @@
 from faker import Faker
 import random
 
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -34,13 +35,19 @@ if __name__ == '__main__':
         )
 
         # add and commit individually to get IDs back
-        session.add(game)
-        session.commit()
-
+        # session.add(game)
+        # session.commit()
+     
         games.append(game)
+        
+    session.bulk_save_objects(games)
+    session.commit()
+    # session.close()
+    
+    retrieved_games = session.query(Game).all()
 
     reviews = []
-    for game in games:
+    for game in retrieved_games:
         for i in range(random.randint(1,5)):
             review = Review(
                 score=random.randint(0, 10),
